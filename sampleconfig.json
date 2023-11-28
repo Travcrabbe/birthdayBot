@@ -1,4 +1,6 @@
 {
-"token": "insert token here and rename this file to config.json"
+"token": "insert token here and rename this file to config.json",
+"guild_id": "insert guild id here",
+"client_id": "insert bot id here"
 }
 

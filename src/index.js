@@ -1,8 +1,13 @@
 const { Client, IntentsBitField } = require("discord.js");
 const fs = require("fs");
-let token;
+const currentDate = new Date();
+const timeStamp = ("[" + (currentDate.getMonth() + 1) + "/" + currentDate.getDate() + "/" + currentDate.getFullYear() + " " + 
+                    currentDate.getHours() + ":" + currentDate.getMinutes()+ "]");
+
+
+let token = "token not set";
 try {
-    token = readConfig();
+    token = configGet("token");
 } catch (err) {
     console.error("Error:", err);
 }
@@ -19,27 +24,37 @@ client.on("ready", (c) => {
     console.log(`${c.user.tag} is online`);
 })
 
-client.on('messageCreate', (message) => {
+client.on("interactionCreate", (interaction) => {
 
-    if (message.author.bot) {
-        return;
+    if (!interaction.isChatInputCommand()) return; 
+
+    console.log(timeStamp + " User @" + interaction.user.username + " ran command /" + interaction.commandName);
+
+    if (interaction.commandName === "ping") {
+        interaction.reply("pong!")
     }
 
-    if (message.content === "ping!") {
-        message.reply("pong!");
-    }
-})
+    
+    
+});
 
-client.login(token);
+ client.login(token);
 
-function readConfig() {
+
+function configGet(key) {
     try {
         const data = fs.readFileSync('config.json', 'utf-8');
         const jsonData = JSON.parse(data);
-        return jsonData.token;
+
+        if (jsonData.hasOwnProperty(key)) {
+            return jsonData[key];
+        } else {
+            console.error(`Key ${key} not found in the config file.`);
+            return null;
+        }
     } catch (err) {
         console.error("Error reading file:", err);
         throw err;
     }
 }
- 
+
