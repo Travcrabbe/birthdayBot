@@ -1,16 +1,17 @@
-const { Client, IntentsBitField } = require("discord.js");
-const fs = require("fs");
+const { Client, IntentsBitField } = require("discord.js"); // Import required for discord integration
+const FileReader = require("./fileReader.js"); // Import js for reading config file
+
+
+// Creates a timestamp to be appended to console logs
 const currentDate = new Date();
 const timeStamp = ("[" + (currentDate.getMonth() + 1) + "/" + currentDate.getDate() + "/" + currentDate.getFullYear() + " " + 
-                    currentDate.getHours() + ":" + currentDate.getMinutes()+ "]");
+                    currentDate.getHours() + ":" + currentDate.getMinutes()+ "] ");
 
+// Read the token from the config file
+const fileReader = new FileReader();
+token = fileReader.configGet("token");
 
-let token = "token not set";
-try {
-    token = configGet("token");
-} catch (err) {
-    console.error("Error:", err);
-}
+// Creates the discord client with the intents needed by the bot
 const client = new Client({
     intents:    [
         IntentsBitField.Flags.Guilds,
@@ -20,18 +21,25 @@ const client = new Client({
     ],
 });
 
+// 
 client.on("ready", (c) => {
-    console.log(`${c.user.tag} is online`);
+    console.log(timeStamp + `${c.user.tag} is online`);
 })
 
 client.on("interactionCreate", (interaction) => {
 
     if (!interaction.isChatInputCommand()) return; 
 
-    console.log(timeStamp + " User @" + interaction.user.username + " ran command /" + interaction.commandName);
+    console.log(timeStamp + "User @" + interaction.user.username + " ran command /" + interaction.commandName);
 
     if (interaction.commandName === "ping") {
-        interaction.reply("pong!")
+        interaction.reply("pong!");
+    }
+
+    if (interaction.commandName === "add") {
+
+
+        interaction.reply("Birthday added!");
     }
 
     
@@ -39,22 +47,4 @@ client.on("interactionCreate", (interaction) => {
 });
 
  client.login(token);
-
-
-function configGet(key) {
-    try {
-        const data = fs.readFileSync('config.json', 'utf-8');
-        const jsonData = JSON.parse(data);
-
-        if (jsonData.hasOwnProperty(key)) {
-            return jsonData[key];
-        } else {
-            console.error(`Key ${key} not found in the config file.`);
-            return null;
-        }
-    } catch (err) {
-        console.error("Error reading file:", err);
-        throw err;
-    }
-}
 
