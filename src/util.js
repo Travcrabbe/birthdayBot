@@ -1,6 +1,6 @@
 const fs = require("fs"); // Import required for reading/writing files
 
-module.exports = class FileReader {
+module.exports = class ConfigReader {
     configGet(key) {
         try {
             const data = fs.readFileSync('config.json', 'utf-8');
@@ -13,7 +13,7 @@ module.exports = class FileReader {
                 return null;
             }
         } catch (err) {
-            console.error("Error reading file:", err);
+            console.error("Error reading config file:", err);
             throw err;
         }
     }

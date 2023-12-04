@@ -1,6 +1,5 @@
 const { Client, IntentsBitField } = require("discord.js"); // Import required for discord integration
-const FileReader = require("./fileReader.js"); // Import js for reading config file
-
+const ConfigReader = require("./util.js"); // Import js for reading config file
 
 // Creates a timestamp to be appended to console logs
 const currentDate = new Date();
@@ -8,8 +7,8 @@ const timeStamp = ("[" + (currentDate.getMonth() + 1) + "/" + currentDate.getDat
                     currentDate.getHours() + ":" + currentDate.getMinutes()+ "] ");
 
 // Read the token from the config file
-const fileReader = new FileReader();
-token = fileReader.configGet("token");
+const configReader = new ConfigReader();
+token = configReader.configGet("token");
 
 // Creates the discord client with the intents needed by the bot
 const client = new Client({

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { REST, Routes, ApplicationCommandOptionType } = require("discord.js")
-const FileReader = require("./fileReader.js"); // Import js for reading config file
+const ConfigReader = require("./util.js"); // Import js for reading config file
 
 // set default values in case of fileReader errors
 let token = "token not set";
@@ -8,10 +8,10 @@ let guildID = "guildID not set";
 let clientID = "clientID not set";
 
 // Read the token, guild id, and bot id (client id) from the config file
-const fileReader = new FileReader();
-token = fileReader.configGet("token");
-guildID = fileReader.configGet("guild_id");
-clientID = fileReader.configGet("client_id");
+const configReader = new ConfigReader();
+token = configReader.configGet("token");
+guildID = configReader.configGet("guild_id");
+clientID = configReader.configGet("client_id");
 
 // establishes a list the list of slash commands and parameters they accept
 const commands = [
