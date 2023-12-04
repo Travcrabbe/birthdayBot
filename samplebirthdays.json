@@ -1,0 +1,14 @@
+[
+	{
+		"userId"     : "replace this with a discord user ID and rename this file to birthdays.json",
+		"birthday" : "replace this with a date formatted in mm/dd/yyyy format"
+	},
+	{
+		"userId"     : "John Doe",
+		"birthday" : "11/24/2004"
+	},
+	{
+		"userId"     : "Mr. Worldwide",
+		"birthday" : "01/15/1981"
+	}
+]
