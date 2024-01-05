@@ -3,20 +3,26 @@ const currentDate = new Date();
 module.exports = class Birthday {
 
 
-    constructor(userId, birthdateString) {
-
+    constructor(userId, date) {
         this.userId = userId;
-        this.date = new Date();
-        if (birthdateString.length == 10) {
-            let month = parseInt(birthdateString.substring(0, 2) - 1); // subtract 1 to convert to 0-based month
-            let day = parseInt(birthdateString.substring(3,5));
-            let year = parseInt(birthdateString.substring(6));
+        this.date = date;
+    }
 
-            // Parse date
-            this.date.setMonth(month);
-            this.date.setDate(day); 
-            this.date.setFullYear(year);
-        }
+    // Creates a new Birthday object from 2 strings || ASSUMES bday string already validated!
+    static fromString(userId, birthdateString) {
+
+        let date = new Date();
+
+        // Parse date
+        let month = parseInt(birthdateString.substring(0, 2) - 1); // subtract 1 to convert to 0-based month
+        let day = parseInt(birthdateString.substring(3,5));
+        let year = parseInt(birthdateString.substring(6));
+
+        date.setMonth(month);
+        date.setDate(day); 
+        date.setFullYear(year);
+
+        return new Birthday(userId, date);
     }
 
     getBirthdayString() {

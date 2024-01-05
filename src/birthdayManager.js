@@ -8,20 +8,22 @@ module.exports = class BirthdayManager {
 
         this.birthdays = []; // Empty array to store Birthday objects
 
-        // Read the birthdays.json file and populate the array
-        try {
-            const birthdayData = fs.readFileSync('birthdays.json', 'utf-8');
-            const birthdayJsonData = JSON.parse(birthdayData);
-
-            for (let i = 0; i < birthdayJsonData.length; i++) {
-                this.birthdays.push(new Birthday(birthdayJsonData[i].userId, birthdayJsonData[i].date))
-            }
-
-            this.sort();
+        // Read the birthdays.json file and populate the array if the file exists
+        if (fs.existsSync(bdayFile)) {
+            try {
+                const birthdayData = fs.readFileSync('birthdays.json', 'utf-8');
+                const birthdayJsonData = JSON.parse(birthdayData);
+                for (let i = 0; i < birthdayJsonData.length; i++) {
+                    this.birthdays.push(new Birthday(birthdayJsonData[i].userId, new Date(birthdayJsonData[i].date)));
+                }
+                this.sort();
             
-        } catch (err) {
-            console.error("Error reading birthday file:", err);
-            throw err;
+            } catch (err) {
+                console.error("Error reading birthday file:", err);
+                throw err;
+            }
+        } else {
+            console.log(bdayFile + " does not exist. Please use /add to begin.");
         }
     }
 
@@ -53,7 +55,7 @@ module.exports = class BirthdayManager {
         console.log("validated");
 
         // Add to array and save to file after validating
-        this.birthdays.push(new Birthday(userId, birthdateString));
+        this.birthdays.push(Birthday.fromString(userId, birthdateString));
         this.sort();
         console.log("Added bday to list");
 
@@ -70,18 +72,7 @@ module.exports = class BirthdayManager {
     // Pushes from bday array to JSON file
     saveToFile() {
 
-        // Need to deep copy bday array before saving to file since we're saving the date as
-        // a String and don't want to overwrite the original date objects with Strings
-        let data = [];
-        for (let i = 0; i < this.birthdays.length; i++) {
-            data.push(new Birthday(this.birthdays[i].userId, this.birthdays[i].date));
-        }
-        
-        for (let i = 0; i < this.birthdays.length; i++) {
-            data[i].date = this.birthdays[i].getBirthdayString();
-        }
-
-        let jsonData = JSON.stringify(data);
+        let jsonData = JSON.stringify(this.birthdays);
 
         try {
             fs.writeFileSync(bdayFile, jsonData);
