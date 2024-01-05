@@ -37,8 +37,24 @@ const commands = [
         ]
     },
     {
+        name: "remove",
+        description: "Removes a birthday from the announcement list.",
+        options: [
+            {
+                name: "user",
+                description: "The user whose birthday you are removing",
+                type: ApplicationCommandOptionType.User,
+                required: true
+            }
+        ]
+    },
+    {
         name: "printbdays",
         description: "Lists all saved birthdays"
+    },
+    {
+        name: "announce",
+        description: "Announces today's birthdays manually"
     }
 ];
 

@@ -25,6 +25,8 @@ module.exports = class BirthdayManager {
         } else {
             console.log(bdayFile + " does not exist. Please use /add to begin.");
         }
+
+        this.currentDate = new Date();
     }
 
     // Print the array in a readable format
@@ -64,6 +66,25 @@ module.exports = class BirthdayManager {
         return "Birthday added successfully.";
     }
 
+    remove(userId) {
+
+        let found = false;
+        for(let i = 0; i < this.birthdays.length; i++) {
+            if (this.birthdays[i].userId === userId) {
+                this.birthdays.splice(i, 1);
+                found = true;
+            }
+        }
+        
+        if (found) {
+            this.sort();
+            this.saveToFile();
+            return "Removed!";
+        } else {
+            return "Could not find this user's birthday.";
+        }
+    }
+
     // Sorts based on date
     sort() {
         this.birthdays.sort((a, b) => a.date - b.date);
@@ -79,6 +100,27 @@ module.exports = class BirthdayManager {
         } catch (error) {
             console.error(error);
         }   
+    }
+
+    announce() {
+
+        let announcement = `No birthdays today!`;
+        let foundBirthday = false;
+        for(let i = 0; i < this.birthdays.length; i++) {
+            let iDate = this.birthdays[i].date; 
+            if (iDate.getMonth() === this.currentDate.getMonth() && iDate.getDate() === this.currentDate.getDate() && !foundBirthday) {
+                announcement = `@everyone It's <@${this.birthdays[i].userId}>'s birthday!  `
+                foundBirthday = true;
+            } else if (iDate.getMonth() === this.currentDate.getMonth() && iDate.getDate() === this.currentDate.getDate() && foundBirthday) {
+
+                announcement += ` Also, it's <@${this.birthdays[i].userId}>'s birthday!`
+            }
+        }
+
+        if (foundBirthday) {
+            announcement += ` WOOOOHOOOOO! Get excited and send them birthday wishes! I can only pretend; I'm a bot.`
+        }
+        return announcement;
     }
 
 }

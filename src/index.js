@@ -1,14 +1,15 @@
 const { Client, IntentsBitField } = require("discord.js"); // Import required for discord integration
 const Util = require("./util.js"); // Import js for reading config file
 const BirthdayManager = require("./birthdayManager.js");
+//const cron = require("cron"); // Import for scheduling events based on system time
 
 // Creates a timestamp to be appended to console logs
 const currentDate = new Date();
 const timeStamp = ("[" + (currentDate.getMonth() + 1) + "/" + currentDate.getDate() + "/" + currentDate.getFullYear() + " " + 
                     currentDate.getHours() + ":" + currentDate.getMinutes()+ "] ");
 
-// Read the token from the config file
-token = Util.configGet("token");
+// Read the token and guildID from the config file
+const token = Util.configGet("token");
 
 // Creates the discord client with the intents needed by the bot
 const client = new Client({
@@ -26,11 +27,19 @@ const birthdayManager = new BirthdayManager();
 // Log when bot comes online
 client.on("ready", (c) => {
     console.log(timeStamp + `${c.user.tag} is online`);
+
+    // This should run every day at noon
+    // let checkForBdays = new cron.CronJob("00 00 12 * * *", () => {
+
+
+    // });
+    
+
 })
 
 // Runs whenever bot interaction occurs
 client.on("interactionCreate", (interaction) => {
-    
+
     // Checks if bot interaction is a slash command and returns if it's not
     if (!interaction.isChatInputCommand()) return; 
 
@@ -49,8 +58,17 @@ client.on("interactionCreate", (interaction) => {
         interaction.reply(result);
     }
 
+    if (interaction.commandName === "remove") {
+        const user = interaction.options.get('user').value;
+        interaction.reply(birthdayManager.remove(user));
+    }
+
     if (interaction.commandName === "printbdays") {
         interaction.reply(birthdayManager.printBirthdays());
+    }
+
+    if (interaction.commandName === "announce") {
+        interaction.reply(birthdayManager.announce());
     }
     
 });
