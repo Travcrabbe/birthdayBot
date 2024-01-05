@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { REST, Routes, ApplicationCommandOptionType } = require("discord.js")
-const ConfigReader = require("./util.js"); // Import js for reading config file
+const Util = require("./util.js"); // Import js for reading config file
 
 // set default values in case of fileReader errors
 let token = "token not set";
@@ -8,10 +8,9 @@ let guildID = "guildID not set";
 let clientID = "clientID not set";
 
 // Read the token, guild id, and bot id (client id) from the config file
-const configReader = new ConfigReader();
-token = configReader.configGet("token");
-guildID = configReader.configGet("guild_id");
-clientID = configReader.configGet("client_id");
+token = Util.configGet("token");
+guildID = Util.configGet("guild_id");
+clientID = Util.configGet("client_id");
 
 // establishes a list the list of slash commands and parameters they accept
 const commands = [
@@ -36,6 +35,10 @@ const commands = [
                 required: true
             }
         ]
+    },
+    {
+        name: "printbdays",
+        description: "Lists all saved birthdays"
     }
 ];
 

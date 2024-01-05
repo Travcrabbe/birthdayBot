@@ -1,7 +1,7 @@
 const fs = require("fs"); // Import required for reading/writing files
 
 module.exports = class ConfigReader {
-    configGet(key) {
+    static configGet(key) {
         try {
             const data = fs.readFileSync('config.json', 'utf-8');
             const jsonData = JSON.parse(data);
