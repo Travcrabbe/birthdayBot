@@ -1,6 +1,7 @@
 {
 "token": "insert token here and rename this file to config.json",
 "guild_id": "insert guild id here",
-"client_id": "insert bot id here"
+"client_id": "insert bot id here",
+"channel_id": "insert the channel id of the channel you want announcements to be made in here"
 }
 

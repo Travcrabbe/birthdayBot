@@ -2,15 +2,10 @@ const fs = require("fs");
 const { REST, Routes, ApplicationCommandOptionType } = require("discord.js")
 const Util = require("./util.js"); // Import js for reading config file
 
-// set default values in case of fileReader errors
-let token = "token not set";
-let guildID = "guildID not set";
-let clientID = "clientID not set";
-
 // Read the token, guild id, and bot id (client id) from the config file
-token = Util.configGet("token");
-guildID = Util.configGet("guild_id");
-clientID = Util.configGet("client_id");
+let token = Util.configGet("token");
+let guildID = Util.configGet("guild_id");
+let clientID = Util.configGet("client_id");
 
 // establishes a list the list of slash commands and parameters they accept
 const commands = [

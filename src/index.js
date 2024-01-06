@@ -1,7 +1,7 @@
 const { Client, IntentsBitField } = require("discord.js"); // Import required for discord integration
 const Util = require("./util.js"); // Import js for reading config file
 const BirthdayManager = require("./birthdayManager.js");
-//const cron = require("cron"); // Import for scheduling events based on system time
+const cron = require("cron"); // Import for scheduling events based on system time
 
 // Creates a timestamp to be appended to console logs
 const currentDate = new Date();
@@ -10,6 +10,8 @@ const timeStamp = ("[" + (currentDate.getMonth() + 1) + "/" + currentDate.getDat
 
 // Read the token and guildID from the config file
 const token = Util.configGet("token");
+const guildID = Util.configGet("guild_id");
+const channelID = Util.configGet("channel_id");
 
 // Creates the discord client with the intents needed by the bot
 const client = new Client({
@@ -28,12 +30,17 @@ const birthdayManager = new BirthdayManager();
 client.on("ready", (c) => {
     console.log(timeStamp + `${c.user.tag} is online`);
 
-    // This should run every day at noon
-    // let checkForBdays = new cron.CronJob("00 00 12 * * *", () => {
+    //This should run every day at noon
+    let checkForBdays = new cron.CronJob("00 00 12 * * *", () => {
 
+        // Automatically announce todays birthdays in the chat specified in the config
+        console.log(timeStamp + "Ran Cron Job: checkForBdays");
+        const guild = client.guilds.cache.get(guildID);
+        const channel = guild.channels.cache.get(channelID);
+        channel.send(birthdayManager.announce());
 
-    // });
-    
+    });
+    checkForBdays.start();
 
 })
 

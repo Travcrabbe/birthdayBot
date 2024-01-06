@@ -36,7 +36,7 @@ module.exports = class BirthdayManager {
             bdayList += ("User: " + this.birthdays[i].userId + ", ");
             bdayList += ("Bday: " + this.birthdays[i].getBirthdayString() + "\n");
         }
-        return bdayList;
+        return bdayList === "" ? "No birthdays found." : bdayList;
     }
 
     toString() {
