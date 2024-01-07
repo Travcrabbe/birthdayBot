@@ -48,7 +48,13 @@ client.on("ready", (c) => {
 client.on("interactionCreate", (interaction) => {
 
     // Checks if bot interaction is a slash command and returns if it's not
-    if (!interaction.isChatInputCommand()) return; 
+    if (!interaction.isChatInputCommand()) return;
+
+    // Checks if the user is an admin who can run commands
+    if (!interaction.memberPermissions.has("Administrator")) {
+        interaction.reply("You need to be an administrator to use this bot!");
+        return;
+    }
 
     // Logs the command which was run
     console.log(timeStamp + "User @" + interaction.user.username + " ran command /" + interaction.commandName);
