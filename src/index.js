@@ -5,13 +5,12 @@ const cron = require("cron"); // Import for scheduling events based on system ti
 
 // Creates a timestamp to be appended to console logs
 const currentDate = new Date();
-const timeStamp = ("[" + (currentDate.getMonth() + 1) + "/" + currentDate.getDate() + "/" + currentDate.getFullYear() + " " + 
-                    currentDate.getHours() + ":" + currentDate.getMinutes()+ "] ");
 
-// Read the token and guildID from the config file
+// Read info from the config file config file
 const token = Util.configGet("token");
 const guildID = Util.configGet("guild_id");
 const channelID = Util.configGet("channel_id");
+let dateLastRan = Util.readDateFile();
 
 // Creates the discord client with the intents needed by the bot
 const client = new Client({
@@ -28,19 +27,7 @@ const birthdayManager = new BirthdayManager();
 
 // Log when bot comes online
 client.on("ready", (c) => {
-    console.log(timeStamp + `${c.user.tag} is online`);
-
-    //This should run every day at noon
-    let checkForBdays = new cron.CronJob("00 00 12 * * *", () => {
-
-        // Automatically announce todays birthdays in the chat specified in the config
-        console.log(timeStamp + "Ran Cron Job: checkForBdays");
-        const guild = client.guilds.cache.get(guildID);
-        const channel = guild.channels.cache.get(channelID);
-        channel.send(birthdayManager.announce());
-
-    });
-    checkForBdays.start();
+    console.log(Util.generateTimeStamp() + `${c.user.tag} is online`);
 
 })
 
@@ -57,7 +44,7 @@ client.on("interactionCreate", (interaction) => {
     }
 
     // Logs the command which was run
-    console.log(timeStamp + "User @" + interaction.user.username + " ran command /" + interaction.commandName);
+    console.log(Util.generateTimeStamp() + "User @" + interaction.user.username + " ran command /" + interaction.commandName);
 
     if (interaction.commandName === "ping") {
         interaction.reply("pong!");
