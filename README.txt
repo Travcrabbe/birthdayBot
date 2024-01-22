@@ -6,8 +6,7 @@ SETUP:
 2. Update all parameters in config.json to your server info / bot ID. 
 3. Run FIRSTTIMESETUP.bat to register slash commands on your server.
 4. Run RUN.bat to bring the bot online, and use /add to add the birthdays you want to announce.
-5. Close RUN.bat and setup AUTORUN.bat to open when you want announcements to be made. You could do this using windows task scheduler,
-   or if you always restart your computer once per day like me, just have it run on system startup.
+5. Close RUN.bat and setup AUTORUN.bat to open when you want announcements to be made. You could do this using windows task scheduler, or if you always restart your computer once per day like me, just have it run on system startup.
 
 Resources used for learning: 
 Discord bot tutorial series: https://www.youtube.com/playlist?list=PLpmb-7WxPhe0ZVpH9pxT5MtC4heqej8Es
