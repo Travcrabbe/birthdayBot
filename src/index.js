@@ -68,9 +68,13 @@ client.on("interactionCreate", (interaction) => {
     }
 
     if (interaction.commandName === "announce") {
-        interaction.reply(birthdayManager.announce());
+        interaction.reply({
+            content: birthdayManager.announce(),
+            allowedMentions: {parse: ['everyone', 'users', 'roles'], repliedUser: true } // ensures that the @everyone mention works as intended
+            });
+        console.log(Util.generateTimeStamp() + "Birthday announcement made!");
     }
-    
+
 });
 
  client.login(token);

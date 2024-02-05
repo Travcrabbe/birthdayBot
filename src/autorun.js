@@ -26,36 +26,40 @@ const client = new Client({
 const birthdayManager = new BirthdayManager();
 
 // Log when bot comes online
-client.on("ready", (c) => {
-    bodyWrapper(c);
+client.on("ready", async (c) => {
+    try {
+        await body(c);
+    } catch (error) {
+        console.error("Error during bot operation:", error);
+    } finally {
+        client.destroy();
     }
-
-
-)
+});
 
 async function body(c) {
     console.log(Util.generateTimeStamp() + `${c.user.tag} is online`);
 
     if (dateLastRan.getDate() === currentDate.getDate() && dateLastRan.getFullYear() === currentDate.getFullYear()) {
         console.log(Util.generateTimeStamp() + "Checked for bdays, but announcement was already made today. Terminating process.");
-        process.exit();
     } else {
-        console.log(Util.generateTimeStamp() + "Checked for bdays. Terminating process.");
+        console.log(Util.generateTimeStamp() + "Checked for bdays.");
+
         const guild = client.guilds.cache.get(guildID);
         const channel = guild.channels.cache.get(channelID);
+
         let announcement = birthdayManager.announce();
         if (announcement !== `No birthdays today!`) {
-            channel.send(announcement);
+            await channel.send({
+                content: announcement,
+                allowedMentions: {
+                    parse: ['everyone', 'users', 'roles'], repliedUser: true } // ensures that the @everyone mention works as intended
+            });
+            console.log(Util.generateTimeStamp() + "Birthday announcement made!");
         }
+
         dateLastRan = currentDate;
         Util.writeDateFile(currentDate);
-
     }
-}
-
-async function bodyWrapper(c) {
-    await body(c);
-    process.exit();
 }
 
 
